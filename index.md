@@ -19,7 +19,7 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 
 ### Members
 
-- [Utku Gökçen](github.com/utkugokcen13)
+- [Utku Gökçen](https://github.com/utkugokcen13)
 - Yiğit Erkal
 - İlhan Koç
 - Emre Erciyas
