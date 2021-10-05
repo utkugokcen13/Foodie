@@ -19,10 +19,14 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 
 ### Members
 
-- Utku Gökçen
+- [Utku Gökçen](github.com/utkugokcen13)
 - Yiğit Erkal
 - İlhan Koç
 - Emre Erciyas
+
+### Reports
+
+- Project Specification Report
 
 ### Support or Contact
 
