@@ -1,20 +1,19 @@
 ## What is Foodie?
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+Foodie is a mobile application for the Android platform. The purpose of this application is to offer the leftover food in mass consumption areas such as restaurants and cafeterias to users at a cheaper price than normal without being thrown away. Users can list the restaurants that sell leftover food near their location, view these restaurants on the map and pay for the meals via the application. In addition, users can view their past purchases to see how much money they have saved and add their favorite restaurants to their favorites list to receive notifications when a new meal is listed.
 
 ### Supervisor
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+- Fazlı Can
 
 ### Jury Members
 
-- John Doe
-- John Doe
+- Shervin Arashloo
+- Hamdi Dibeklioglu
 
 ### Innovation Expert
 
-- John Doe
+- Murat Ergun
 
 
 ### Members
@@ -26,8 +25,5 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 
 ### Reports
 
-- Project Specification Report
+- [Project Specification Report](https://github.com/utkugokcen13/Foodie/blob/main/Project%20Specification%20Report.pdf)
 
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
