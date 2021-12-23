@@ -10,7 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Foodie">
         <activity
-            android:name=".MainActivity"
+            android:name=".CustomerSignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.Foodie.NoActionBar" />
+        <activity
+            android:name=".SelectUserTypeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
