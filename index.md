@@ -27,4 +27,5 @@ Foodie is a mobile application for the Android platform. The purpose of this app
 
 - [Project Specification Report](https://github.com/utkugokcen13/Foodie/blob/main/Project%20Specification%20Report.pdf)
 - [Analysis Report](https://github.com/utkugokcen13/Foodie/blob/main/Analysis%20Report.pdf)
+- [High-Level Design Report] (https://github.com/utkugokcen13/Foodie/blob/master/Foodie%20High-Level%20Design%20Report.pdf)
 
