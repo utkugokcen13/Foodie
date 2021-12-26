@@ -1,10 +1,10 @@
-package com.app.foodie
+package com.app.foodie.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.view.View
+import com.app.foodie.R
 
 class SelectUserTypeActivity : AppCompatActivity() {
     var userTypeCounter : Int? = null
@@ -35,9 +35,4 @@ class SelectUserTypeActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-
-
-
-
 }

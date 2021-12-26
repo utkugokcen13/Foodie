@@ -1,8 +1,9 @@
-package com.app.foodie
+package com.app.foodie.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.view.View
 import android.widget.Toast
 import com.app.foodie.databinding.ActivityCustomerSignUpBinding
@@ -10,7 +11,6 @@ import com.app.foodie.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -53,10 +53,16 @@ class CustomerSignUpActivity : AppCompatActivity() {
                     writeNewUser(name, surname, phoneNumber, email)
 
 
-                    val intent = Intent(this, LoginActivity::class.java)
+                    val intent = Intent(this, CustomerMainActivity::class.java).apply{
+                        putExtra(EXTRA_MESSAGE, name)
+                        putExtra(EXTRA_MESSAGE, surname)
+                        putExtra(EXTRA_MESSAGE, phoneNumber)
+                        putExtra(EXTRA_MESSAGE, email)
 
+                    }
                     startActivity(intent)
                     finish()
+
                 }.addOnFailureListener {
                     Toast.makeText(this,it.localizedMessage,Toast.LENGTH_LONG).show()
                 }
@@ -70,7 +76,6 @@ class CustomerSignUpActivity : AppCompatActivity() {
         val user = User(name, surname, phoneNumber, email)
 
         database.child("Users").child(name).setValue(user)
-
     }
 
 

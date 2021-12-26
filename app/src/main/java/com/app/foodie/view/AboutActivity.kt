@@ -1,11 +1,12 @@
-package com.app.foodie
+package com.app.foodie.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.app.foodie.R
 
-class LoginActivity : AppCompatActivity() {
+class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_about)
     }
 }
