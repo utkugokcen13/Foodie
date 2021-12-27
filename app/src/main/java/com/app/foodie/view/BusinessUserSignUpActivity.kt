@@ -33,8 +33,8 @@ class BusinessUserSignUpActivity : AppCompatActivity() {
         val bankAccountNo = binding.customerEmail.text.toString()
         val phoneNumber = binding.customerPhoneNumber.text.toString()
 
-        if (businessName.isNotEmpty() && addressBusiness.isNotEmpty()) {
-
+        if (addressBusiness.isNotEmpty() && businessName.isNotEmpty()) {
+            
         }
     }
 
