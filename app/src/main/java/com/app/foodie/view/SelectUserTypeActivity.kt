@@ -23,6 +23,10 @@ class SelectUserTypeActivity : AppCompatActivity() {
         userTypeCounter = 2
     }
 
+    fun loginClicked(view: View) {
+        userTypeCounter = 3
+    }
+
     fun continueClicked(view: View) {
         if (userTypeCounter == 1){
             val intent = Intent(this, CustomerSignUpActivity::class.java).apply {
@@ -30,9 +34,17 @@ class SelectUserTypeActivity : AppCompatActivity() {
             startActivity(intent)
         }
         if (userTypeCounter == 2){
+            val intent = Intent(this, BusinessUserSignUpActivity::class.java).apply {
+            }
+            startActivity(intent)
+        }
+        /*
+        if (userTypeCounter == 3){
             val intent = Intent(this, LoginActivity::class.java).apply {
             }
             startActivity(intent)
         }
+        */
+
     }
 }
