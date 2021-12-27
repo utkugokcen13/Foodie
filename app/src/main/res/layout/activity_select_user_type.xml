@@ -38,7 +38,7 @@
         android:layout_marginStart="232dp"
         android:layout_marginTop="256dp"
         android:onClick="businessClicked"
-        android:src="@drawable/restaurant"
+        android:src="@drawable/businessimg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
