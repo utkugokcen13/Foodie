@@ -53,13 +53,13 @@ class CustomerSignUpActivity : AppCompatActivity() {
                     writeNewUser(name, surname, phoneNumber, email)
 
 
-                    val intent = Intent(this, CustomerMainActivity::class.java).apply{
-                        putExtra(EXTRA_MESSAGE, name)
-                        putExtra(EXTRA_MESSAGE, surname)
-                        putExtra(EXTRA_MESSAGE, phoneNumber)
-                        putExtra(EXTRA_MESSAGE, email)
+                    val intent = Intent(this, CustomerMainActivity::class.java)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("phoneNumber", phoneNumber)
+                    intent.putExtra("email", email)
 
-                    }
+
                     startActivity(intent)
                     finish()
 

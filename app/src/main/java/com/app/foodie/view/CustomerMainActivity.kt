@@ -28,8 +28,15 @@ class CustomerMainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         mainAdapter = MainRecyclerAdapter(arrayList)
         binding.recyclerView.adapter = mainAdapter
+
         val mSearchView = findViewById<SearchView>(R.id.searchView)
+
         mSearchView.setQueryHint("Search a Business");
+
+        val name = intent.getStringExtra("name")
+        val surname = intent.getStringExtra("surname")
+        val email = intent.getStringExtra("email")
+        val phoneNumber = intent.getStringExtra("phoneNumber")
 
 
 
@@ -39,6 +46,10 @@ class CustomerMainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.nav_profile ->{
                     val intent = Intent(this, CustomerProfileActivity::class.java)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("phoneNumber", phoneNumber)
+                    intent.putExtra("email", email)
                     startActivity(intent)
                     finish()
                 }
