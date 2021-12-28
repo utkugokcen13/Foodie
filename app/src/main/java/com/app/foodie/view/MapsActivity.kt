@@ -1,16 +1,8 @@
 package com.app.foodie.view
 
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.AlarmClock
-import android.transition.TransitionManager
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.PopupWindow
 import com.app.foodie.R
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,16 +12,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.app.foodie.databinding.ActivityMapsBinding
-import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    val bottom_navigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +30,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-
+        val bottom_navigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         bottom_navigation.setOnItemSelectedListener {
             when(it.itemId){
@@ -83,23 +71,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        // Add a marker in Sydney and move the camera
+        val mark1 = LatLng(39.882874, 32.754991)
+        mMap.addMarker(MarkerOptions().position(mark1).title("restaurant1"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mark1))
 
-        // Add a marker in Ankara and move the camera
-        val ankara = LatLng(39.883061, 32.756493)
-        mMap.addMarker(MarkerOptions().position(ankara).title("Marker in Ankara"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(ankara))
-        mMap.setOnMarkerClickListener {
-            val view = layoutInflater.inflate(R.layout.business_popup, null)
-            val popupWindow = PopupWindow(view)
+        val mark2 = LatLng(39.909064, 32.770711)
+        mMap.addMarker(MarkerOptions().position(mark2).title("restaurant2"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mark2))
 
-            popupWindow.contentView = view
-            popupWindow.showAsDropDown(bottom_navigation)
-
-
-            true
-        }
-
-
-
+        val mark3 = LatLng(39.877649, 32.732449)
+        mMap.addMarker(MarkerOptions().position(mark3).title("restaurant3"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mark3))
     }
 }

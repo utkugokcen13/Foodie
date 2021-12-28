@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="110dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/gradient_background"
+        android:clickable="true"
+        android:onClick="aboutClicked"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/businessName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Business Name"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:textSize="18dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/businessType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Business Type - 5km"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="60dp"
+            android:textSize="18dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/addFavorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/ic_baseline_favorite_24"
+            android:layout_marginStart="360dp"
+            android:layout_marginTop="10dp"/>
+
+        <ImageView
+            android:id="@+id/rating"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/ic_baseline_star_rate_24"
+            android:layout_marginStart="340dp"
+            android:layout_marginTop="50dp"/>
+
+        <TextView
+            android:id="@+id/ratingPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.5"
+            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:layout_marginStart="373dp"
+            android:layout_marginTop="55dp"/>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
