@@ -6,8 +6,7 @@ import PageContext from "../thema/tema1/component/PageContext";
 
 const active = {Home: "active"};
 class Home extends React.Component {
-    componentDidMount() {
-
+    componentDidMount(props) {
     }
     constructor(props)
     {
@@ -19,12 +18,17 @@ class Home extends React.Component {
                 <Header/>
                 <SideMenu home="active"/>
                 <PageContext>
-                Home
+                    Menu
                 </PageContext>
                 <Footer/>
             </div>);
     }
 }
 
-
+const button = {
+    marginTop: "0px",
+    marginLeft: "10px",
+    float: "left",
+    width: "100px"
+};
 export default Home;
