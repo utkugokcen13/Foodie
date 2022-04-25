@@ -21,7 +21,7 @@
 
 
 <ImageView
-android:id="@+id/meal_image"
+android:id="@+id/meal_image1"
 android:layout_width="338dp"
 android:layout_height="72dp"
 android:layout_marginStart="36dp"
@@ -41,7 +41,7 @@ app:layout_constraintStart_toStartOf="parent"
 app:layout_constraintTop_toTopOf="parent" />
 
 <TextView
-android:id="@+id/meal_price"
+android:id="@+id/meal_price1"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_marginStart="328dp"
@@ -51,7 +51,7 @@ app:layout_constraintStart_toStartOf="parent"
 app:layout_constraintTop_toTopOf="parent" />
 
 <TextView
-android:id="@+id/meal_discounted_price"
+android:id="@+id/meal_discounted_price1"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_marginStart="328dp"

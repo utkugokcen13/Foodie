@@ -54,24 +54,28 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
     override fun onItemClick(position: Int) {
 
         val clickedItem = mealArrayList[position]
-        Toast.makeText(this, clickedItem.mealID.toString(), Toast.LENGTH_LONG).show()
+        Toast.makeText(this, clickedItem.meal_id.toString(), Toast.LENGTH_LONG).show()
         menuAdapter.notifyItemChanged(position)
-        //val intent = Intent(this, DetailedBusinessActivity::class.java)
-        //intent.putExtra("businessname", clickedItem.businessName)
-        //intent.putExtra("businessaddress", clickedItem.businessAddress)
-        //intent.putExtra("pickuptimerange", clickedItem.)
-        //startActivity(intent)
-        //finish()
+        val intent = Intent(this, DetailedMealActivity::class.java)
+        /*TODO
+        *  Price ve discounted price ı int olarak döndür*/
+
+        intent.putExtra("foodname", clickedItem.meal_name)
+        intent.putExtra("description", clickedItem.meal_description)
+        intent.putExtra("price", clickedItem.meal_price.toString())
+        intent.putExtra("discountedprice", clickedItem.meal_discounted_price.toString())
+        startActivity(intent)
+        finish()
     }
 
     private fun getMealData(){
-        database = FirebaseDatabase.getInstance().getReference("Business/Emre/menu")
+        database = FirebaseDatabase.getInstance().getReference("Business").child("Emre").child("menu")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     for (mealSnapShot in snapshot.children){
                         val meal = mealSnapShot.getValue(Meal::class.java)
-                        Log.d("TAG", meal!!.mealName)
+                        Log.d("TAG", meal!!.meal_discounted_price.toString())
                         mealArrayList.add(meal!!)
                     }
                     menu_recyclerview.adapter = menuAdapter

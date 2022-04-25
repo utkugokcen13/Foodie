@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Foodie">
         <activity
+            android:name=".view.DetailedMealActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DetailedMealActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.DetailedBusinessActivity"
             android:exported="false" />
         <activity

@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/cart_icon.xml" value="0.3260416666666667" />
+        <entry key="app/src/main/res/drawable/circle.xml" value="0.119" />
         <entry key="app/src/main/res/drawable/custom_input.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/drawable/gradient_backgorund.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/drawable/gradient_background.xml" value="0.24114583333333334" />
@@ -21,6 +22,7 @@
         <entry key="app/src/main/res/layout/activity_customer_profile.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_customer_sign_up.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_detailed_business.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_detailed_meal.xml" value="0.28456420898437507" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_login1.xml" value="0.19157608695652173" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.11041666666666666" />

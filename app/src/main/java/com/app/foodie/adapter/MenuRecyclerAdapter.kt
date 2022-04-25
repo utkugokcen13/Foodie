@@ -7,9 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.foodie.R
-import com.app.foodie.databinding.ActivityCustomerSignUpBinding
-import com.app.foodie.databinding.RecyclerRowBinding
-import com.app.foodie.models.Business
 import com.app.foodie.models.Meal
 
 class MenuRecyclerAdapter(private val mealArrayList : ArrayList<Meal>,
@@ -26,11 +23,11 @@ class MenuRecyclerAdapter(private val mealArrayList : ArrayList<Meal>,
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val item = mealArrayList[position]
-        holder.mealName.text = item.mealName
-        holder.mealPrice.text = item.mealprice.toString()
-        holder.mealDiscountedPrice.text = item.mealDiscountedPrice.toString()
+        holder.meal_name.text = item.meal_name
+        holder.meal_price.text = item.meal_price.toString()
+        holder.meal_discounted_price.text = item.meal_discounted_price.toString()
         if(position == 0){
-            holder.mealName.setBackgroundColor(Color.YELLOW)
+            holder.meal_name.setBackgroundColor(Color.YELLOW)
         }
 
     }
@@ -40,9 +37,9 @@ class MenuRecyclerAdapter(private val mealArrayList : ArrayList<Meal>,
     }
 
     inner class PostHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
-        val mealName : TextView = itemView.findViewById(R.id.meal_name)
-        val mealPrice : TextView = itemView.findViewById(R.id.meal_price)
-        val mealDiscountedPrice : TextView = itemView.findViewById(R.id.meal_discounted_price)
+        val meal_name : TextView = itemView.findViewById(R.id.meal_name)
+        val meal_price : TextView = itemView.findViewById(R.id.meal_price1)
+        val meal_discounted_price : TextView = itemView.findViewById(R.id.meal_discounted_price1)
 
         init {
             itemView.setOnClickListener(this)
