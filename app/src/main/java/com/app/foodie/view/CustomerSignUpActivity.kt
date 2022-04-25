@@ -7,6 +7,7 @@ import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.view.View
 import android.widget.Toast
 import com.app.foodie.databinding.ActivityCustomerSignUpBinding
+import com.app.foodie.models.Business
 import com.app.foodie.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -51,7 +52,9 @@ class CustomerSignUpActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
                     // success
                     writeNewUser(name, surname, phoneNumber, email)
-
+                    /*writeNewBusiness("Mado","Patisserie",4.23,39.909455, 32.754934)
+                    writeNewBusiness("Nusret","Steak House",4.13,39.900560, 32.741911)
+                    writeNewBusiness("Tavacı Recep Usta","Restaurant",4.86,39.870160, 32.696743)*/
 
                     val intent = Intent(this, CustomerMainActivity::class.java)
                     intent.putExtra("name", name)
@@ -77,6 +80,13 @@ class CustomerSignUpActivity : AppCompatActivity() {
 
         database.child("Users").child(name).setValue(user)
     }
+
+    /*fun writeNewBusiness(name: String, type: String, rating: Double, latitude: Double, longitude: Double){
+        database = Firebase.database.reference
+        val business = Business(name, type, rating, latitude, longitude)
+
+        database.child("Business").child(name).setValue(business)
+    }*/
 
 
 }

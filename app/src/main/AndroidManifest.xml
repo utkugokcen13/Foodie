@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Foodie">
         <activity
+            android:name=".view.DetailedBusinessActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.BusinessUserSignUpActivity"
             android:exported="false" />
         <!--
@@ -46,7 +49,7 @@
             android:name=".view.CustomerSignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".view.SelectUserTypeActivity"
             android:exported="false" />
         <activity
             android:name=".ui.LoginActivity"
@@ -54,7 +57,7 @@
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.Foodie.NoActionBar" />
         <activity
-            android:name=".view.SelectUserTypeActivity"
+            android:name=".view.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

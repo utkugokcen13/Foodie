@@ -20,10 +20,12 @@
         app:menu="@menu/bottom_nav_menu" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerView1"
         android:layout_width="match_parent"
         android:layout_height="620dp"
-        android:layout_marginTop="60dp" />
+        android:layout_marginTop="60dp"
+        android:clickable="true"
+        tools:listitem="@layout/recycler_row" />
 
     <ImageView
         android:id="@+id/filter"

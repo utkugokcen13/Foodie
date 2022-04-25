@@ -1,8 +1,10 @@
 package com.app.foodie.view
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.app.foodie.R
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -12,18 +14,30 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.app.foodie.databinding.ActivityMapsBinding
+import com.app.foodie.models.Business
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.*
+import kotlinx.coroutines.awaitCancellation
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+
+
+
+
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -69,19 +83,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
+        database = FirebaseDatabase.getInstance().getReference("Business")
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    for (businessSnapShot in snapshot.children){
+                        val business = businessSnapShot.getValue(Business::class.java)
+                        val mark = LatLng(business!!.latitude, business!!.longitude)
+                        googleMap.addMarker(MarkerOptions().position(mark).title(business!!.businessName))
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(mark))
+                    }
+                }
+            }
 
-        // Add a marker in Sydney and move the camera
-        val mark1 = LatLng(39.882874, 32.754991)
-        mMap.addMarker(MarkerOptions().position(mark1).title("restaurant1"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mark1))
-
-        val mark2 = LatLng(39.909064, 32.770711)
-        mMap.addMarker(MarkerOptions().position(mark2).title("restaurant2"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mark2))
-
-        val mark3 = LatLng(39.877649, 32.732449)
-        mMap.addMarker(MarkerOptions().position(mark3).title("restaurant3"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mark3))
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
+
+
 }
