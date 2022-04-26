@@ -4,12 +4,9 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.foodie.R
-import com.app.foodie.databinding.ActivityCustomerSignUpBinding
-import com.app.foodie.databinding.RecyclerRowBinding
 import com.app.foodie.models.Business
 import kotlinx.android.synthetic.main.recycler_row.view.*
 

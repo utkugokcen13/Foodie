@@ -26,7 +26,6 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
     private lateinit var mainAdapter : MainRecyclerAdapter
     private lateinit var database: DatabaseReference
     private lateinit var businessArrayList : ArrayList<Business>
-    private var clickedBusinessID: Int = 0
     //private lateinit var recyclerView: RecyclerView
 
 

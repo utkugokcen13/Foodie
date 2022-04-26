@@ -23,6 +23,9 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
     private lateinit var menuAdapter : MenuRecyclerAdapter
     private lateinit var database: DatabaseReference
     private lateinit var mealArrayList : ArrayList<Meal>
+    private lateinit var businessName : String
+    private lateinit var businessAddress : String
+    //private lateinit var pickupTimeRange : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +36,13 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
         menu_recyclerview.layoutManager = LinearLayoutManager(this)
         menu_recyclerview.setHasFixedSize(true)
 
-        val businessName = intent.getStringExtra("businessname")
-        val businessAddress = intent.getStringExtra("businessaddress")
-        val pickupTimeRange = intent.getStringExtra("pickuptimerange")
+        businessName = intent.getStringExtra("businessname").toString()
+        businessAddress = intent.getStringExtra("businessaddress").toString()
+        //pickupTimeRange = intent.getStringExtra("pickuptimerange")
 
         business_name.text = businessName
         business_address.text = businessAddress
-        business_time.text = pickupTimeRange
+        //business_time.text = pickupTimeRange
 
 
 
@@ -64,6 +67,13 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
         intent.putExtra("description", clickedItem.meal_description)
         intent.putExtra("price", clickedItem.meal_price.toString())
         intent.putExtra("discountedprice", clickedItem.meal_discounted_price.toString())
+        intent.putExtra("mealid",clickedItem.meal_id)
+        intent.putExtra("mealstock",clickedItem.meal_stock)
+        intent.putExtra("mealposition", position)
+
+        intent.putExtra("businessname", businessName)
+        intent.putExtra("businessaddress", businessAddress)
+        intent.putExtra("mealid",clickedItem.meal_id)
         startActivity(intent)
         finish()
     }
