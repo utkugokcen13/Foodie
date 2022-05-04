@@ -22,105 +22,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="58dp"
-            android:layout_marginTop="70dp"
-            app:srcCompat="@drawable/coins" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="188dp"
-            android:layout_marginTop="70dp"
-            app:srcCompat="@drawable/earth" />
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                />
 
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="312dp"
-            android:layout_marginTop="70dp"
-            app:srcCompat="@drawable/people" />
 
-        <TextView
-            android:id="@+id/nameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="120dp"
-            android:layout_marginTop="10dp"
-            android:text="TextView" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/surnameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="195dp"
-            android:layout_marginTop="10dp"
-            android:text="TextView" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="50dp"
-            app:srcCompat="@drawable/oval" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="50dp"
-            app:srcCompat="@drawable/oval" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="265dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="10dp"
-            app:srcCompat="@drawable/oval" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="86dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="100dp"
-            android:text="You saved 120 TL"
-            android:textAlignment="center"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="86dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="158dp"
-            android:layout_marginTop="100dp"
-            android:text="You saved 5.3 kg food"
-            android:textAlignment="center"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="86dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="282dp"
-            android:layout_marginTop="100dp"
-            android:text="You invited 6 person"
-            android:textAlignment="center"
-            android:textColor="@color/black" />
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

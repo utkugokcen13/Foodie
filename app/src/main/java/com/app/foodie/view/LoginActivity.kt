@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import com.app.foodie.R
 import com.app.foodie.databinding.ActivityCustomerProfileBinding
@@ -16,6 +17,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth : FirebaseAuth
+    private lateinit var back_button : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
         auth = Firebase.auth
+
+        var actionBar = supportActionBar
+
+        if(actionBar != null){
+            actionBar.setTitle("Login")
+        }
+
     }
 
     fun signInClicked(view : View){
@@ -35,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         }else{
             auth.signInWithEmailAndPassword(email,password).addOnSuccessListener {
                 val intent = Intent(this@LoginActivity, CustomerMainActivity::class.java)
+                intent.putExtra("checkprevious",1)
                 startActivity(intent)
                 finish()
             }.addOnFailureListener {

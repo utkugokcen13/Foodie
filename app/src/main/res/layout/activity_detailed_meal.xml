@@ -30,11 +30,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/leftarrow" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/meal_image1"
         android:layout_width="260dp"
         android:layout_height="178dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="72dp"
+        app:shapeAppearanceOverlay="@style/roundImageView"
         android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+
+    android:layout_height="310dp"
     android:clickable="true"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="10dp"
     app:cardMaxElevation="12dp"
     app:cardPreventCornerOverlap="true"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="4dp">
-
+        android:layout_height="300dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="20dp">
 
         <TextView
             android:id="@+id/businessName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="200dp"
             android:text="Business Name"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="18dp" />
 
@@ -34,11 +37,11 @@
             android:id="@+id/businessType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="60dp"
-            android:text="Business Type - 5km"
-            android:textColor="@color/black"
-            android:textSize="18dp" />
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="230dp"
+            android:text="Business Type"
+            android:textColor="#3C3F41"
+            android:textSize="16dp" />
 
         <ImageView
             android:id="@+id/addFavorite"
@@ -50,20 +53,62 @@
 
         <ImageView
             android:id="@+id/rating"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="340dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="350dp"
+            android:layout_marginTop="200dp"
             app:srcCompat="@drawable/ic_baseline_star_rate_24" />
 
         <TextView
             android:id="@+id/ratingPoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="373dp"
-            android:layout_marginTop="55dp"
+            android:layout_marginStart="370dp"
+            android:layout_marginTop="200dp"
             android:text="4.5"
             android:textColor="@color/black"
-            android:textSize="18dp" />
-    </RelativeLayout>
-</androidx.cardview.widget.CardView>
+            android:textSize="12dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/businessImage"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            android:src="@drawable/ic_launcher_background"
+            app:shapeAppearanceOverlay="@style/roundImageView" />
+
+        <ImageView
+            android:id="@+id/clockImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/clock"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="262dp"/>
+
+        <ImageView
+            android:id="@+id/forkImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/fork"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="232dp"/>
+        <TextView
+            android:id="@+id/pickupTimeRange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="260dp"
+            android:text="11.00 - 22.00"
+            android:textColor="#3C3F41"
+            android:textSize="16dp" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
