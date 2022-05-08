@@ -34,9 +34,6 @@ class MenuRecyclerAdapter(private val mealArrayList : ArrayList<Meal>,
         holder.meal_discounted_price.text = item.meal_discounted_price.toString()
         holder.meal_description.text = item.meal_description
         Glide.with(context).load(mealArrayList.get(position).ImageUrl).into(holder.meal_image)
-        if(position == 0){
-            holder.meal_name.setBackgroundColor(Color.YELLOW)
-        }
 
     }
 

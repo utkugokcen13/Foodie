@@ -19,6 +19,8 @@ import com.app.foodie.models.Business
 import com.app.foodie.models.Meal
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_customer_main.*
 import kotlinx.android.synthetic.main.activity_detailed_business.*
@@ -33,16 +35,26 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
     private lateinit var cartArrayList : ArrayList<Meal>
     //private lateinit var pickupTimeRange : String
 
+    private lateinit var currentUser : FirebaseUser
+
+    private lateinit var name : String
+    private lateinit var surname : String
+    private lateinit var email : String
+    private lateinit var phoneNumber : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailed_business)
         var actionBar = supportActionBar
+        currentUser = FirebaseAuth.getInstance().currentUser!!
 
         if(actionBar != null){
             actionBar.setTitle("Business Detail")
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
-
+        businessName = intent.getStringExtra("businessname").toString()
+        businessAddress = intent.getStringExtra("businessaddress").toString()
+        businessImage = intent.getStringExtra("businessimage").toString()
 
         mealArrayList = ArrayList<Meal>()
         getMealData()
@@ -50,9 +62,12 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
         menu_recyclerview.layoutManager = LinearLayoutManager(this)
         menu_recyclerview.setHasFixedSize(true)
 
-        businessName = intent.getStringExtra("businessname").toString()
-        businessAddress = intent.getStringExtra("businessaddress").toString()
-        businessImage = intent.getStringExtra("businessimage").toString()
+
+
+        name = intent.getStringExtra("name").toString()
+        surname = intent.getStringExtra("surname").toString()
+        email = intent.getStringExtra("email").toString()
+        phoneNumber = intent.getStringExtra("phoneNumber").toString()
         //pickupTimeRange = intent.getStringExtra("pickuptimerange")
 
         business_name.text = businessName
@@ -81,6 +96,10 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -94,6 +113,10 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -107,6 +130,10 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -120,6 +147,27 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
+                    intent.putExtra("bundle",bundle)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            when(it.itemId){
+                R.id.nav_order ->{
+                    var bundle = Bundle()
+                    bundle!!.putSerializable("cartarraylist",cartArrayList)
+                    val intent = Intent(this, CustomerProfileActivity::class.java)
+                    intent.putExtra("businessname", businessName)
+                    intent.putExtra("businessaddress", businessAddress)
+                    intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -151,6 +199,10 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
         intent.putExtra("businessname", businessName)
         intent.putExtra("businessaddress", businessAddress)
         intent.putExtra("businessimage", businessImage)
+        intent.putExtra("name", name)
+        intent.putExtra("surname", surname)
+        intent.putExtra("email", email)
+        intent.putExtra("phonenumber", phoneNumber)
         intent.putExtra("bundle",bundle)
         startActivity(intent)
         finish()
@@ -180,12 +232,17 @@ class DetailedBusinessActivity : AppCompatActivity(), MenuRecyclerAdapter.OnItem
         intent.putExtra("businessaddress", businessAddress)
         intent.putExtra("businessimage", businessImage)
         intent.putExtra("mealid",clickedItem.meal_id)
+
+        intent.putExtra("name", name)
+        intent.putExtra("surname", surname)
+        intent.putExtra("email", email)
+        intent.putExtra("phonenumber", phoneNumber)
         startActivity(intent)
         finish()
     }
 
     private fun getMealData(){
-        database = FirebaseDatabase.getInstance().getReference("Business").child("Emre").child("menu")
+        database = FirebaseDatabase.getInstance().getReference("Business").child(businessName).child("menu")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){

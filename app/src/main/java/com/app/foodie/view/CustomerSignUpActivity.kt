@@ -10,6 +10,7 @@ import com.app.foodie.databinding.ActivityCustomerSignUpBinding
 import com.app.foodie.models.Business
 import com.app.foodie.models.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -20,6 +21,7 @@ class CustomerSignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivityCustomerSignUpBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private lateinit var currentUser : FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,7 @@ class CustomerSignUpActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         database = Firebase.database.reference
+
 
     }
 
@@ -52,12 +55,10 @@ class CustomerSignUpActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
                     // success
                     writeNewUser(name, surname, phoneNumber, email)
-                    /*writeNewBusiness("Mado","Patisserie",4.23,39.909455, 32.754934)
-                    writeNewBusiness("Nusret","Steak House",4.13,39.900560, 32.741911)
-                    writeNewBusiness("Tavacı Recep Usta","Restaurant",4.86,39.870160, 32.696743)*/
 
                     val intent = Intent(this, CustomerMainActivity::class.java)
                     intent.putExtra("name", name)
+                    intent.putExtra("checkprevious",1)
                     intent.putExtra("surname", surname)
                     intent.putExtra("phoneNumber", phoneNumber)
                     intent.putExtra("email", email)
@@ -75,10 +76,17 @@ class CustomerSignUpActivity : AppCompatActivity() {
     }
 
     fun writeNewUser(name: String, surname: String, phoneNumber: String, email: String) {
+        currentUser = FirebaseAuth.getInstance().currentUser!!
         database = Firebase.database.reference
-        val user = User(name, surname, phoneNumber, email)
+        val user = User(name, surname, phoneNumber, email, null, null)
 
-        database.child("Users").child(name).setValue(user)
+        database.child("Users").child(currentUser.uid).setValue(user)
+    }
+
+    fun haveAccountClicked(view : View){
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     /*fun writeNewBusiness(name: String, type: String, rating: Double, latitude: Double, longitude: Double){

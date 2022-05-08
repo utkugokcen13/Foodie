@@ -13,6 +13,8 @@ import com.app.foodie.models.Business
 import com.app.foodie.view.CustomerMainActivity
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.recycler_row.view.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class MainRecyclerAdapter(
     private val businessArrayList : ArrayList<Business>,
@@ -27,14 +29,13 @@ class MainRecyclerAdapter(
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val item = businessArrayList[position]
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.CEILING
         holder.businessName.text = item.businessName
         holder.businessType.text = item.businessType
-        holder.ratingPoint.text = item.avgRating.toString()
+        holder.ratingPoint.text = df.format(item.totalRating / item.ratingCount).toString()
         holder.businessName.transitionName = item.businessID.toString()
         Glide.with(context).load(businessArrayList.get(position).ImageUrl).into(holder.businessImage)
-        if(position == 0){
-            holder.businessName.setBackgroundColor(Color.YELLOW)
-        }
 
 
     }

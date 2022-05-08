@@ -14,6 +14,7 @@ import com.app.foodie.databinding.ActivityCustomerProfileBinding
 import com.app.foodie.models.Meal
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
@@ -41,11 +42,22 @@ class CustomerProfileActivity : AppCompatActivity() {
     private lateinit var businessAddress : String
     private lateinit var cartArrayList : ArrayList<Meal>
 
+    private lateinit var name : String
+    private lateinit var surname : String
+    private lateinit var email : String
+    private lateinit var phoneNumber : String
+
+    private lateinit var currentUser : FirebaseUser
+
+    private var totalSavedMoney : Double = 0.0
+    private var totalSavedFood : Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomerProfileBinding.inflate(layoutInflater)
         var actionBar = supportActionBar
+        currentUser = FirebaseAuth.getInstance().currentUser!!
 
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true)
@@ -55,16 +67,19 @@ class CustomerProfileActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        val name = intent.getStringExtra("name")
-        val surname = intent.getStringExtra("surname")
-        val email = intent.getStringExtra("email")
-        val phoneNumber = intent.getStringExtra("phoneNumber")
+        name = intent.getStringExtra("name").toString()
+        surname = intent.getStringExtra("surname").toString()
+        email = intent.getStringExtra("email").toString()
+        phoneNumber = intent.getStringExtra("phoneNumber").toString()
 
-        val businessName = intent.getStringExtra("businessname")
-        val businessAddress = intent.getStringExtra("businessaddress")
-        val businessImage = intent.getStringExtra("businessimage")
+        businessName = intent.getStringExtra("businessname").toString()
+        businessAddress = intent.getStringExtra("businessaddress").toString()
+        businessImage = intent.getStringExtra("businessimage").toString()
         val pickupTimeRange = intent.getStringExtra("pickuptimerange")
         val previousActivity = intent.getIntExtra("checkprevious",0)
+
+        totalSavedMoney = intent.getDoubleExtra("totalsavedmoney", 0.0)
+        totalSavedFood = intent.getIntExtra("totalsavedfood", 0)
 
         if(previousActivity != 1){
             if(intent !=null)
@@ -100,6 +115,10 @@ class CustomerProfileActivity : AppCompatActivity() {
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -113,23 +132,33 @@ class CustomerProfileActivity : AppCompatActivity() {
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
                 }
             }
-            when(it.itemId){
-                R.id.nav_map ->{
+            when(it.itemId) {
+                R.id.nav_map -> {
                     var bundle = Bundle()
-                    bundle!!.putSerializable("cartarraylist",cartArrayList)
+                    bundle!!.putSerializable("cartarraylist", cartArrayList)
                     val intent = Intent(this, MapsActivity::class.java)
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
-                    intent.putExtra("bundle",bundle)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
+                    intent.putExtra("bundle", bundle)
                     startActivity(intent)
                     finish()
                 }
+            }
+            when(it.itemId){
                 R.id.nav_cart ->{
                     var bundle = Bundle()
                     bundle!!.putSerializable("cartarraylist",cartArrayList)
@@ -137,6 +166,28 @@ class CustomerProfileActivity : AppCompatActivity() {
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
+                    intent.putExtra("bundle",bundle)
+                    startActivity(intent)
+                    finish()
+                }
+
+            }
+            when(it.itemId){
+                R.id.nav_order ->{
+                    var bundle = Bundle()
+                    bundle!!.putSerializable("cartarraylist",cartArrayList)
+                    val intent = Intent(this, CustomerProfileActivity::class.java)
+                    intent.putExtra("businessname", businessName)
+                    intent.putExtra("businessaddress", businessAddress)
+                    intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -151,8 +202,8 @@ class CustomerProfileActivity : AppCompatActivity() {
         val color3s = "#ADDFAD"
         val color3 = Color.parseColor(color3s)
 
-        money = "You saved " + 255 + "TL"
-        food = "You saved " + 50 + " servings of food from being thrown away"
+        money = "You saved " + totalSavedMoney + " ₺"
+        food = "You saved " + totalSavedFood + " servings of food from being thrown away"
         invite = "You invited " + 4 + " person"
 
         addToList(money,R.drawable.dollar,color3)

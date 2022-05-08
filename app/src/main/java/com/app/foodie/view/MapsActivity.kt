@@ -17,8 +17,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.app.foodie.databinding.ActivityMapsBinding
 import com.app.foodie.models.Business
 import com.app.foodie.models.Meal
+import com.app.foodie.models.User
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.single.PermissionListener
@@ -34,9 +38,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
     private lateinit var businessArrayList : ArrayList<Business>
     var hashMap : HashMap<String, String> = HashMap<String, String> ()
 
+    private lateinit var name : String
+    private lateinit var surname : String
+    private lateinit var email : String
+    private lateinit var phoneNumber : String
+
+    private lateinit var currentUser : FirebaseUser
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var actionBar = supportActionBar
+        currentUser = FirebaseAuth.getInstance().currentUser!!
 
         if(actionBar != null){
             actionBar.setTitle("Map")
@@ -61,6 +73,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         val businessAddress = intent.getStringExtra("businessaddress")
         val businessImage = intent.getStringExtra("businessimage")
         val pickupTimeRange = intent.getStringExtra("pickuptimerange")
+
+        name = intent.getStringExtra("name").toString()
+        surname = intent.getStringExtra("surname").toString()
+        email = intent.getStringExtra("email").toString()
+        phoneNumber = intent.getStringExtra("phoneNumber").toString()
         businessArrayList = ArrayList<Business>()
 
 
@@ -84,6 +101,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -97,6 +118,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -110,6 +135,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -123,6 +152,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
+                    intent.putExtra("bundle",bundle)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            when(it.itemId){
+                R.id.nav_order ->{
+                    var bundle = Bundle()
+                    bundle!!.putSerializable("cartarraylist",cartArrayList)
+                    val intent = Intent(this, CustomerProfileActivity::class.java)
+                    intent.putExtra("businessname", businessName)
+                    intent.putExtra("businessaddress", businessAddress)
+                    intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -143,6 +193,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+
         database = FirebaseDatabase.getInstance().getReference("Business")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -151,20 +202,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                         val business = businessSnapShot.getValue(Business::class.java)
                         businessArrayList.add(business!!)
                         val mark = LatLng(business!!.latitude, business!!.longitude)
+
                         val marker = googleMap.addMarker(MarkerOptions().position(mark).title(business!!.businessName).snippet(business!!.businessType))
-
-
-
-
-                        //database.child(business!!.businessName).child("markerID").setValue(marker.id)
-                        //val markerID = mapOf<String,String>("markerID" to marker.id)
-                        //database.updateChildren(markerID)
+                        /*database.child(business!!.businessName).child("markerID").setValue(marker.id)
+                        val markerID = mapOf<String,String>("markerID" to marker.id)
+                        database.updateChildren(markerID)*/
                     }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+            }
+        })
+
+        database = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.uid)
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val user = snapshot.getValue(User::class.java)
+                    val userMark = LatLng(user?.latitude!!, user?.longitude!!)
+
+                    val marker = googleMap.addMarker(MarkerOptions().position(userMark).title("Your Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)))
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
             }
         })
         googleMap.setOnInfoWindowClickListener(this)
@@ -174,6 +237,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
 
     override fun onInfoWindowClick(p0: Marker?) {
         Toast.makeText(this,p0!!.id, Toast.LENGTH_SHORT).show()
+
     }
 
 

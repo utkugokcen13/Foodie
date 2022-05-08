@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
@@ -29,9 +30,13 @@ import com.app.foodie.models.Business
 import com.app.foodie.models.Meal
 import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_customer_main.*
 import kotlinx.android.synthetic.main.recycler_row.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClickListener {
@@ -40,37 +45,31 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
     private lateinit var mainAdapter : MainRecyclerAdapter
     private lateinit var database: DatabaseReference
     private lateinit var businessArrayList : ArrayList<Business>
+    private lateinit var tempArrayList : ArrayList<Business>
     private lateinit var cartArrayList : ArrayList<Meal>
+    private lateinit var name : String
+    private lateinit var surname : String
+    private lateinit var email : String
+    private lateinit var phoneNumber : String
+    private lateinit var currentUser : FirebaseUser
+    private lateinit var currentUserUid : String
+    private var latitude : Double = 0.0
+    private var longitude : Double = 0.0
+    lateinit var locationRequest: LocationRequest
+    val PERMISSION_ID = 1010
 
-    var currentLocation : Location? = null
-    val REQUEST_CODE : Int = 101
-
-    val callback = object : LocationCallback(){
-        override fun onLocationAvailability(p0: LocationAvailability) {
-            super.onLocationAvailability(p0)
-        }
-
-        override fun onLocationResult(result: LocationResult) {
-            val lastLocation = result.lastLocation
-
-            Log.d("TAG", lastLocation.latitude.toString() + " " + lastLocation.longitude.toString())
-
-            super.onLocationResult(result)
-        }
-    }
 
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    //private lateinit var recyclerView: RecyclerView
-    companion object{
-        private const val REQUEST_PERMISSION_REQUEST_CODE = 100
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customer_main)
+
+
         var actionBar = supportActionBar
+        currentUser = FirebaseAuth.getInstance().currentUser!!
 
         if(actionBar != null){
             actionBar.setTitle("Foodie")
@@ -78,10 +77,17 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
+        RequestPermission()
+
+        getLastLocation()
+
+
+
 
         businessArrayList = ArrayList<Business>()
+        tempArrayList = ArrayList<Business>()
         getBusinessData()
-        mainAdapter = MainRecyclerAdapter(businessArrayList,this,this)
+        mainAdapter = MainRecyclerAdapter(tempArrayList,this,this)
         recyclerView1.layoutManager = LinearLayoutManager(this)
         recyclerView1.setHasFixedSize(true)
 
@@ -95,12 +101,40 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
         val previousActivity = intent.getIntExtra("checkprevious",0)
 
 
-        mSearchView.setQueryHint("Search a Business");
+        mSearchView.setQueryHint("Search a Business")
 
-        val name = intent.getStringExtra("name")
-        val surname = intent.getStringExtra("surname")
-        val email = intent.getStringExtra("email")
-        val phoneNumber = intent.getStringExtra("phoneNumber")
+        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                tempArrayList.clear()
+                val searchText = p0!!.toLowerCase(Locale.getDefault())
+                if(searchText.isNotEmpty()){
+                    businessArrayList.forEach{
+                        if(it.businessName.toLowerCase(Locale.getDefault()).contains(searchText)){
+                            tempArrayList.add(it)
+                        }
+                    }
+                    recyclerView1.adapter!!.notifyDataSetChanged()
+                }else{
+                    tempArrayList.clear()
+                    tempArrayList.addAll(businessArrayList)
+                    recyclerView1.adapter!!.notifyDataSetChanged()
+                }
+                return false
+
+            }
+
+        })
+
+        name = intent.getStringExtra("name").toString()
+        surname = intent.getStringExtra("surname").toString()
+        email = intent.getStringExtra("email").toString()
+        phoneNumber = intent.getStringExtra("phoneNumber").toString()
+
+
         if(previousActivity != 1){
             if(intent !=null)
             {
@@ -125,9 +159,15 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
                     var bundle = Bundle()
                     bundle!!.putSerializable("cartarraylist",cartArrayList)
                     val intent = Intent(this, CustomerProfileActivity::class.java)
+                    intent.putExtra("latitude", latitude)
+                    intent.putExtra("longitude", longitude)
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -138,9 +178,15 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
                     var bundle = Bundle()
                     bundle!!.putSerializable("cartarraylist",cartArrayList)
                     val intent = Intent(this, CustomerMainActivity::class.java)
+                    intent.putExtra("latitude", latitude)
+                    intent.putExtra("longitude", longitude)
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -151,9 +197,15 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
                     var bundle = Bundle()
                     bundle!!.putSerializable("cartarraylist",cartArrayList)
                     val intent = Intent(this, MapsActivity::class.java)
+                    intent.putExtra("latitude", latitude)
+                    intent.putExtra("longitude", longitude)
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -164,9 +216,34 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
                     var bundle = Bundle()
                     bundle!!.putSerializable("cartarraylist",cartArrayList)
                     val intent = Intent(this, CartActivity::class.java)
+                    intent.putExtra("latitude", latitude)
+                    intent.putExtra("longitude", longitude)
                     intent.putExtra("businessname", businessName)
                     intent.putExtra("businessaddress", businessAddress)
                     intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
+                    intent.putExtra("bundle",bundle)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            when(it.itemId){
+                R.id.nav_order ->{
+                    var bundle = Bundle()
+                    bundle!!.putSerializable("cartarraylist",cartArrayList)
+                    val intent = Intent(this, OrdersActivity::class.java)
+                    intent.putExtra("latitude", latitude)
+                    intent.putExtra("longitude", longitude)
+                    intent.putExtra("businessname", businessName)
+                    intent.putExtra("businessaddress", businessAddress)
+                    intent.putExtra("businessimage", businessImage)
+                    intent.putExtra("name", name)
+                    intent.putExtra("surname", surname)
+                    intent.putExtra("email", email)
+                    intent.putExtra("phonenumber", phoneNumber)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
                     finish()
@@ -176,71 +253,11 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
             true
         }
 
-        onGPS()
-        findViewById<ImageView>(R.id.filter).setOnClickListener {
-            requestLocation()
-
-        }
 
 
     }
-
-    private fun fetchLocation(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 200)
-                return
-            }else{
-                requestLocation()
-            }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun requestLocation() {
-        val requestLocation = LocationRequest()
-        requestLocation.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        requestLocation.interval = 0
-        requestLocation.fastestInterval = 0
-        requestLocation.numUpdates = 1
-        fusedLocationProviderClient.requestLocationUpdates(
-            requestLocation,callback, Looper.myLooper()!!
-        )
-    }
-
-    fun onGPS(){
-        if(!isLocationEnabled()){
-            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-        }else{
-            fetchLocation()
-        }
-    }
-
-    private fun isLocationEnabled():Boolean{
-        val locationManager  = applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
-    /*private fun requestPermission(){
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_PERMISSION_REQUEST_CODE)
-    }*/
-
-    /*private fun checkPermissions() : Boolean {
-        //check permission
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                //ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),1)
-                return true
-        }
-            //getCurrentLocation()
-        return false
-
-    }*/
-
-    /*private fun getCurrentLocation(){
-        if(checkPermissions()){
+    fun getLastLocation(){
+        if(CheckPermission()){
             if(isLocationEnabled()){
                 if (ActivityCompat.checkSelfPermission(
                         this,
@@ -250,46 +267,142 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    requestPermission()
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
                     return
                 }
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener(this){ task ->
-                    val location: Location? = task.result
-                    if(location ==null){
-                        Toast.makeText(this,"Null received",Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        Toast.makeText(this,"Get success",Toast.LENGTH_SHORT).show()
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener { task->
+                    var location:Location? = task.result
+                    if(location == null){
+                        NewLocationData()
+                    }else{
+                        //Log.d("Debug:" ,"Your Location:"+ location.longitude)
+                        //Log.d("tag","You Current Location is : Long: "+ location.longitude + " , Lat: " + location.latitude)
+                        latitude = location.latitude
+                        longitude = location.longitude
+                        Log.d("TAG" ,"Your Location: "+ location.latitude + " " + location.longitude)
+                        database = FirebaseDatabase.getInstance().getReference("Users")
+
+                        database.child(currentUser.uid).child("latitude").setValue(latitude)
+                        database.child(currentUser.uid).child("longitude").setValue(longitude)
                     }
                 }
+            }else{
+                Toast.makeText(this,"Please Turn on Your device Location",Toast.LENGTH_SHORT).show()
             }
-            else{
-                Toast.makeText(this,"Turn on location",Toast.LENGTH_SHORT).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        }
-        else{
-            requestPermission()
-        }
-
-
-    }*/
-
-/*override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if(requestCode == REQUEST_PERMISSION_REQUEST_CODE){
-        if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(applicationContext,"Granted",Toast.LENGTH_SHORT).show()
-            getCurrentLocation()
         }else{
-            Toast.makeText(applicationContext,"Denied",Toast.LENGTH_SHORT).show()
+            RequestPermission()
         }
     }
-}*/
+
+
+    fun NewLocationData(){
+        var locationRequest =  LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 0
+        locationRequest.fastestInterval = 0
+        locationRequest.numUpdates = 1
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        Looper.myLooper()?.let {
+            fusedLocationProviderClient!!.requestLocationUpdates(
+                locationRequest,locationCallback, it
+            )
+        }
+    }
+
+
+    private val locationCallback = object : LocationCallback(){
+        override fun onLocationResult(locationResult: LocationResult) {
+            var lastLocation: Location = locationResult.lastLocation
+            Log.d("Debug:","your last last location: "+ lastLocation.longitude.toString())
+            Log.d("Tag","You Last Location is : Long: "+ lastLocation.longitude + " , Lat: " + lastLocation.latitude)
+        }
+    }
+
+    private fun CheckPermission():Boolean{
+        //this function will return a boolean
+        //true: if we have permission
+        //false if not
+        if(
+            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ){
+            return true
+        }
+
+        return false
+
+    }
+
+    fun RequestPermission(){
+        //this function will allows us to tell the user to requesut the necessary permsiion if they are not garented
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSION_ID
+        )
+    }
+
+    fun isLocationEnabled():Boolean{
+        //this function will return to us the state of the location service
+        //if the gps or the network provider is enabled then it will return true otherwise it will return false
+        var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == PERMISSION_ID){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.d("Debug:","You have the Permission")
+            }
+        }
+    }
+
 
 
     override fun onItemClick(position: Int) {
@@ -299,9 +412,15 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
         var bundle = Bundle()
         bundle!!.putSerializable("cartarraylist",cartArrayList)
         val intent = Intent(this, DetailedBusinessActivity::class.java)
+        intent.putExtra("latitude", latitude)
+        intent.putExtra("longitude", longitude)
         intent.putExtra("businessname", clickedItem.businessName)
         intent.putExtra("businessaddress", clickedItem.businessAddress)
         intent.putExtra("businessimage", clickedItem.ImageUrl)
+        intent.putExtra("name", name)
+        intent.putExtra("surname", surname)
+        intent.putExtra("email", email)
+        intent.putExtra("phonenumber", phoneNumber)
         intent.putExtra("bundle",bundle)
         //intent.putExtra("pickuptimerange", clickedItem.)
         startActivity(intent)
@@ -319,6 +438,7 @@ class CustomerMainActivity : AppCompatActivity(), MainRecyclerAdapter.OnItemClic
                     businessArrayList.add(business!!)
                 }
                 recyclerView1.adapter = mainAdapter
+                tempArrayList.addAll(businessArrayList)
             }
         }
 

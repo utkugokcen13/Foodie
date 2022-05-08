@@ -31,8 +31,7 @@
                 android:id="@+id/view_pager2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                />
+                android:layout_centerInParent="true" />
 
 
         </RelativeLayout>
@@ -58,9 +57,9 @@
         android:layout_marginTop="220dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/gradient_background"
         android:clickable="true"
         android:onClick="aboutClicked"
-        android:background="@drawable/gradient_background"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
@@ -89,10 +88,10 @@
 
         <ImageView
             android:id="@+id/imageView64"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             app:srcCompat="@drawable/info" />
     </androidx.cardview.widget.CardView>
 
@@ -103,6 +102,8 @@
         android:layout_marginTop="290dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:onClick="settingsClicked"
         android:background="@drawable/gradient_background"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
@@ -111,6 +112,7 @@
         app:cardPreventCornerOverlap="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/imageView10"
             android:layout_width="40dp"
@@ -131,10 +133,10 @@
 
         <ImageView
             android:id="@+id/imageView22"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             app:srcCompat="@drawable/settings" />
 
     </androidx.cardview.widget.CardView>
@@ -154,6 +156,7 @@
         app:cardPreventCornerOverlap="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/imageView11"
             android:layout_width="40dp"
@@ -174,10 +177,10 @@
 
         <ImageView
             android:id="@+id/imageView6"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             app:srcCompat="@drawable/invite" />
 
     </androidx.cardview.widget.CardView>

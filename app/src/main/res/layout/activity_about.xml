@@ -19,25 +19,24 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="351dp"
-        android:layout_height="146dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="148dp"
-        android:text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
+        android:layout_width="358dp"
+        android:layout_height="273dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="300dp"
+        android:text="Foodie is a mobile application for the Android platform. The purpose of this application is to offer the leftover food in mass consumption areas such as restaurants and cafeterias to users at a cheaper price without being thrown away. Users can list the restaurants that sell leftover food near their location, view these restaurants on the map and pay for the meals via the application."
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginTop="56dp"
-        android:text="About Foodie"
-        android:textColor="@color/black"
-        android:textSize="24sp"
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="186dp"
+        android:layout_height="189dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="68dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/foodie" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
